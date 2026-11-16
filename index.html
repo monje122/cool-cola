@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Cool Cola — Experiencia 3D Scrollytelling & Catálogo Oficial 2L</title>
+  <meta name="description" content="Descubre la refrescante colección de Cool Cola en formato familiar de 2 Litros. 8 sabores, 1 sola pasión. Pide directamente por WhatsApp.">
+  <meta name="theme-color" content="#e31b23">
+  
+  <!-- Favicon & Fonts -->
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- PRELOADER -->
+  <div id="preloader" class="preloader">
+    <div class="preloader-content">
+      <div class="preloader-logo-wrap">
+        <img src="assets/logo.png" alt="Cool Cola Logo" class="preloader-logo-img">
+      </div>
+      <h2 class="preloader-title">Preparando Experiencia 3D</h2>
+      <p class="preloader-subtitle">Cargando 75 fotogramas en ultra definición...</p>
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar" style="width: 0%;"></div>
+      </div>
+      <div class="progress-info">
+        <span id="progress-percent">0%</span>
+        <span class="progress-tag">8 Sabores • Botellas 2L</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STICKY HEADER -->
+  <header class="site-header" id="site-header">
+    <div class="header-container">
+      <a href="#scrolly-track" class="brand-logo" id="logo-link">
+        <img src="assets/logo.png" alt="Cool Cola" class="site-logo-img">
+        <span class="logo-text">Cool<span class="logo-accent">Cola</span></span>
+        <span class="logo-badge">2L</span>
+      </a>
+
+      <nav class="nav-links">
+        <a href="#scrolly-track" class="nav-link active">Experiencia 3D</a>
+        <a href="#catalog-section" class="nav-link">Sabores 2L</a>
+        <a href="#benefits-section" class="nav-link">Calidad Cool</a>
+        <a href="#catalog-section" class="nav-link">Cómo Pedir</a>
+      </nav>
+
+      <div class="header-actions">
+        <!-- View Mode Switcher -->
+        <button id="view-mode-btn" class="icon-action-btn desktop-only" title="Alternar Vista Panorámica / Celular" aria-label="Modo Pantalla">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="5" y="2" width="14" height="20" rx="3" ry="3"/>
+            <line x1="12" y1="18" x2="12" y2="18.01"/>
+          </svg>
+          <span id="view-mode-label">Móvil UI</span>
+        </button>
+
+        <!-- Cart Trigger Button -->
+        <button id="open-cart-btn" class="cart-trigger-btn" aria-label="Abrir carrito de compras">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/>
+            <circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span class="cart-text">Pedido</span>
+          <span id="cart-counter" class="cart-counter">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- SCROLLYTELLING CONTAINER (280vh track for buttery smooth native scroll physics) -->
+  <section class="scrolly-track" id="scrolly-track">
+    <div class="scrolly-sticky">
+      <!-- High-DPI Responsive Canvas -->
+      <canvas id="story-canvas"></canvas>
+
+      <!-- HUD FLOATING CONTROLS & CHAPTER INDICATOR -->
+      <div class="hud-overlay">
+        <!-- Top HUD Bar -->
+        <div class="hud-top-bar">
+          <div class="hud-chapter-badge">
+            <span class="hud-pulse-dot"></span>
+            <span id="hud-chapter-text">Capítulo 01 / 05 — Explosión Multicromática</span>
+          </div>
+
+          <div class="hud-progress-meter">
+            <svg class="progress-ring" width="38" height="38">
+              <circle class="progress-ring-bg" stroke="rgba(255,255,255,0.15)" stroke-width="3" fill="transparent" r="16" cx="19" cy="19"/>
+              <circle id="hud-progress-circle" class="progress-ring-fill" stroke="#e31b23" stroke-width="3" stroke-dasharray="100.5" stroke-dashoffset="100.5" stroke-linecap="round" fill="transparent" r="16" cx="19" cy="19"/>
+            </svg>
+            <span id="hud-progress-num" class="progress-num">0%</span>
+          </div>
+        </div>
+
+        <!-- Dynamic Flavor Spec HUD Card (Right side on desktop, bottom sheet on mobile) -->
+        <div class="hud-spec-card" id="hud-spec-card">
+          <div class="spec-card-header">
+            <span class="spec-flavor-tag" id="spec-flavor-tag">8 SABORES EN 1</span>
+            <span class="spec-size-badge">2 Litros</span>
+          </div>
+          <h3 class="spec-flavor-title" id="spec-flavor-title">Explosión Cítrica Total</h3>
+          <p class="spec-flavor-desc" id="spec-flavor-desc">Desliza hacia abajo para recorrer la frescura de cada botella Cool.</p>
+          
+          <div class="spec-meters">
+            <div class="spec-meter-row">
+              <span class="spec-meter-label">Refrescancia</span>
+              <div class="spec-meter-track"><div id="spec-meter-refrescancia" class="spec-meter-fill" style="width: 98%;"></div></div>
+              <span id="spec-val-refrescancia" class="spec-meter-val">98%</span>
+            </div>
+            <div class="spec-meter-row">
+              <span class="spec-meter-label">Gas / Burbuja</span>
+              <div class="spec-meter-track"><div id="spec-meter-burbuja" class="spec-meter-fill" style="width: 95%;"></div></div>
+              <span id="spec-val-burbuja" class="spec-meter-val">95%</span>
+            </div>
+            <div class="spec-meter-row">
+              <span class="spec-meter-label">Intensidad</span>
+              <div class="spec-meter-track"><div id="spec-meter-intensidad" class="spec-meter-fill" style="width: 92%;"></div></div>
+              <span id="spec-val-intensidad" class="spec-meter-val">92%</span>
+            </div>
+          </div>
+
+          <div class="spec-actions">
+            <button class="spec-quick-add-btn" id="spec-quick-add-btn">
+              <span>+ Añadir al Carrito</span>
+              <strong>$1.80</strong>
+            </button>
+          </div>
+        </div>
+
+        <!-- Cinematic Story Overlays (Faded in/out per scroll milestone) -->
+        <div class="story-overlays-container">
+          <!-- Milestone 1 (0% - 22%) -->
+          <div class="milestone-card active" id="milestone-1">
+            <div class="milestone-tag">8 SABORES • 1 SOLA PASIÓN</div>
+            <h1 class="milestone-headline">REFRESCANCIA<br><span class="gradient-text-cool">A OTRO NIVEL</span></h1>
+            <p class="milestone-body">Burbujas intensas, aromas frutales y la fórmula perfecta de 2 Litros para compartir con todo tu equipo.</p>
+            <div class="milestone-scroll-hint">
+              <span class="scroll-mouse">
+                <span class="scroll-wheel"></span>
+              </span>
+              <span>Desliza para descubrir cada sabor</span>
+            </div>
+          </div>
+
+          <!-- Milestone 2 (22% - 46%) -->
+          <div class="milestone-card" id="milestone-2">
+            <div class="milestone-tag tag-cool-blue">🍋 CÍTRICO EXTREMO</div>
+            <h2 class="milestone-headline">COOL LIMÓN 2L<br><span class="gradient-text-cool">FRESCO & CHISPEANTE</span></h2>
+            <p class="milestone-body">Lima y limón verde natural con golpe de hielo polar. El antídoto absoluto para los días calurosos.</p>
+            <div class="milestone-chips">
+              <span class="chip">Toque ácido balanceado</span>
+              <span class="chip">Gas de larga duración</span>
+              <span class="chip">Pura lima</span>
+            </div>
+          </div>
+
+          <!-- Milestone 3 (46% - 68%) -->
+          <div class="milestone-card" id="milestone-3">
+            <div class="milestone-tag tag-cool-red">🍊 DULZURA CÍTRICA</div>
+            <h2 class="milestone-headline">COOL NARANJA 2L<br><span class="gradient-text-cool">EXPLOSIÓN VALENCIANA</span></h2>
+            <p class="milestone-body">El balance ideal entre la dulzura del sol y la acidez jugosa de la naranja fresca recién exprimida.</p>
+            <div class="milestone-chips">
+              <span class="chip">Zumo vibrante</span>
+              <span class="chip">Aroma frutal intenso</span>
+              <span class="chip">Favorito familiar</span>
+            </div>
+          </div>
+
+          <!-- Milestone 4 (68% - 88%) -->
+          <div class="milestone-card" id="milestone-4">
+            <div class="milestone-tag tag-cool-blue">🍇 EL MÁS PEDIDO</div>
+            <h2 class="milestone-headline">COOL UVA 2L<br><span class="gradient-text-cool">DULZOR INCONFUNDIBLE</span></h2>
+            <p class="milestone-body">La corona de uvas negras y efervescencia dulce que se convirtió en leyenda. Sabor dulce, único y adictivo.</p>
+            <div class="milestone-chips">
+              <span class="chip">Uva morada intensa</span>
+              <span class="chip">Efervescencia dulce</span>
+              <span class="chip">Top en ventas</span>
+            </div>
+          </div>
+
+          <!-- Milestone 5 (88% - 100%) -->
+          <div class="milestone-card" id="milestone-5">
+            <div class="milestone-tag tag-cool-red">⭐ COLECCIÓN COMPLETA</div>
+            <h2 class="milestone-headline">ARMA TU EQUIPO<br><span class="gradient-text-cool">PIDE COOL AHORA</span></h2>
+            <p class="milestone-body">Los 8 sabores reunidos en tu mesa: Cola Negra, Limón, Naranja, Uva, Kola Roja, Manzana Verde, Piña y Maracuyá.</p>
+            <div class="milestone-cta-group">
+              <a href="#catalog-section" class="btn-primary-glow">Explorar Sabores 2L ↓</a>
+              <button class="btn-secondary-glass" onclick="document.getElementById('open-cart-btn').click();">Ver Mi Pedido</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating Quick Skip to Store Button -->
+        <a href="#catalog-section" class="hud-skip-btn" id="hud-skip-btn">
+          <span>Ir al Catálogo</span>
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORE & CATALOG SECTION -->
+  <main class="store-section" id="catalog-section">
+    <!-- Header with Glow Line -->
+    <div class="section-container">
+      <div class="section-header-block">
+        <div class="badge-pill">CATÁLOGO OFICIAL 2026</div>
+        <h2 class="section-title">Elige Tus Sabores Favoritos</h2>
+        <p class="section-subtitle">Todas nuestras presentaciones son en botella familiar de <strong>2 Litros</strong>, con gas de larga duración y sabor insuperable a solo <strong>$1.80 c/u</strong>.</p>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="filter-pills-bar">
+        <button class="filter-pill active" data-category="all">Todos los Sabores (8)</button>
+        <button class="filter-pill" data-category="citrico">🍋 Cítricos & Frescos</button>
+        <button class="filter-pill" data-category="frutal">🍇 Frutales & Dulces</button>
+        <button class="filter-pill" data-category="clasico">⭐ Clásicos Tradicionales</button>
+      </div>
+
+      <!-- Product Cards Grid -->
+      <div class="product-grid" id="product-grid">
+        <!-- Products injected dynamically via main.js -->
+      </div>
+    </div>
+  </main>
+
+  <!-- BENEFITS & STORY SECTION -->
+  <section class="benefits-section" id="benefits-section">
+    <div class="section-container">
+      <div class="section-header-block">
+        <div class="badge-pill">COMPROMISO COOL</div>
+        <h2 class="section-title">¿Por Qué Elegir Cool Cola?</h2>
+        <p class="section-subtitle">Calidad, sabor vibrante y el mejor precio por litro del mercado.</p>
+      </div>
+
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon icon-red">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#e31b23" stroke-width="2">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </div>
+          <h3 class="benefit-title">Formato Familiar 2L</h3>
+          <p class="benefit-text">Cada botella rinde hasta 10 vasos bien servidos con hielo. Máxima economía y rendimiento para todo el hogar.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon icon-blue">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#0056b3" stroke-width="2">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+            </svg>
+          </div>
+          <h3 class="benefit-title">Burbujas de Larga Duración</h3>
+          <p class="benefit-text">Fórmula de alta carbonatación que mantiene el cosquilleo y la frescura incluso horas después de abierta.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon icon-white">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#ffffff" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+            </svg>
+          </div>
+          <h3 class="benefit-title">8 Sabores Exclusivos</h3>
+          <p class="benefit-text">Desde el clásico sabor a cola hasta uva y mezclas cítricas tropicales que no encontrarás en otra marca.</p>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-icon icon-red">
+            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#e31b23" stroke-width="2">
+              <rect x="1" y="3" width="15" height="13"/>
+              <polygon points="16 8 20 8 23 11 23 16 16 16 8"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/>
+              <circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+          </div>
+          <h3 class="benefit-title">Entrega Directa por WhatsApp</h3>
+          <p class="benefit-text">Pide en un solo toque sin registros complicados. Coordinamos tu entrega en minutos con delivery express.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUTRITIONAL MODAL -->
+  <div id="nutrition-modal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="modal-close-btn" aria-label="Cerrar modal">&times;</button>
+      <div class="modal-header">
+        <span class="modal-badge" id="modal-flavor-badge">Cool Limón 2L</span>
+        <h3 class="modal-title" id="modal-flavor-title">Información Nutricional</h3>
+        <p class="modal-subtitle">Porción de referencia: 200 ml (1 vaso) • Botella rinde 10 porciones</p>
+      </div>
+
+      <div class="nutrition-table-container">
+        <table class="nutrition-table">
+          <thead>
+            <tr>
+              <th>Componente</th>
+              <th>Por Porción (200ml)</th>
+              <th>% VD*</th>
+            </tr>
+          </thead>
+          <tbody id="modal-nutrition-rows">
+            <!-- Injected dynamically -->
+          </tbody>
+        </table>
+        <p class="nutrition-note">* Valores Diarios con base a una dieta de 2,000 kcal.</p>
+      </div>
+
+      <div class="ingredients-box">
+        <h4>Ingredientes:</h4>
+        <p id="modal-ingredients-text">Agua carbonatada tratada, azúcar refinada de caña, acidulante (ácido cítrico), saborizantes naturales e idénticos al natural de limón y lima, conservante (benzoato de sodio), antioxidante.</p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-modal-add" id="modal-add-to-cart-btn">Añadir al Carrito ($1.80)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE-OVER CART DRAWER -->
+  <div id="cart-drawer-overlay" class="cart-drawer-overlay" aria-hidden="true">
+    <aside class="cart-drawer" id="cart-drawer" role="dialog" aria-label="Carrito de compras">
+      <!-- Drawer Header -->
+      <div class="cart-header">
+        <div class="cart-header-title">
+          <img src="assets/logo.png" alt="Cool Cola" class="cart-header-logo">
+          <h3>Tu Pedido Cool</h3>
+          <span class="cart-badge-count" id="drawer-item-count">0 items</span>
+        </div>
+        <button id="close-cart-btn" class="cart-close-btn" aria-label="Cerrar carrito">&times;</button>
+      </div>
+
+      <!-- Free Shipping Tracker -->
+      <div class="shipping-tracker">
+        <div class="shipping-info-text">
+          <span id="shipping-tracker-label">Envío gratis a partir de $8.00</span>
+          <strong id="shipping-tracker-status">Faltan $8.00</strong>
+        </div>
+        <div class="shipping-progress-track">
+          <div id="shipping-progress-bar" class="shipping-progress-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Cart Item List -->
+      <div class="cart-items-container" id="cart-items-container">
+        <!-- Empty State -->
+        <div class="cart-empty-state" id="cart-empty-state">
+          <div class="empty-icon">🥤</div>
+          <h4>Tu carrito está vacío</h4>
+          <p>Explora nuestros 8 sabores de 2 Litros y añade tu combinación favorita para refrescarte.</p>
+          <button class="btn-explore-catalog" id="btn-empty-explore">Ver Sabores Disponibles</button>
+        </div>
+
+        <!-- Populated items will be injected here -->
+        <div class="cart-items-list" id="cart-items-list"></div>
+      </div>
+
+      <!-- Drawer Footer with Promo Code & Checkout -->
+      <div class="cart-footer" id="cart-footer">
+        <!-- Coupon Form -->
+        <div class="coupon-section">
+          <div class="coupon-input-group">
+            <input type="text" id="coupon-input" placeholder="Código de descuento (ej. COOL15)" aria-label="Código promocional">
+            <button id="apply-coupon-btn" class="btn-apply-coupon">Aplicar</button>
+          </div>
+          <div id="coupon-feedback" class="coupon-feedback"></div>
+        </div>
+
+        <!-- Customer Delivery Information -->
+        <div class="delivery-details-box">
+          <div class="form-row">
+            <input type="text" id="customer-name" placeholder="Tu Nombre Completo *" required>
+          </div>
+          <div class="form-row">
+            <input type="text" id="customer-address" placeholder="Dirección de Entrega / Zona *" required>
+          </div>
+          <div class="form-row">
+            <select id="payment-method">
+              <option value="Pago Móvil">Método: Pago Móvil (Bs al cambio)</option>
+              <option value="Efectivo en Dólares">Método: Efectivo USD al recibir</option>
+              <option value="Zelle">Método: Zelle</option>
+              <option value="Punto de Venta Delivery">Método: Punto de Venta en Delivery</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Price Breakdown -->
+        <div class="price-breakdown">
+          <div class="breakdown-row">
+            <span>Subtotal:</span>
+            <span id="summary-subtotal">$0.00</span>
+          </div>
+          <div class="breakdown-row discount-row" id="summary-discount-row" style="display: none;">
+            <span>Descuento aplicado:</span>
+            <span id="summary-discount">-$0.00</span>
+          </div>
+          <div class="breakdown-row">
+            <span>Envío Express:</span>
+            <span id="summary-shipping" class="free-shipping-text">Calculando...</span>
+          </div>
+          <div class="breakdown-row total-row">
+            <span>Total a Pagar:</span>
+            <span id="summary-total">$0.00</span>
+          </div>
+        </div>
+
+        <!-- WhatsApp Checkout Button -->
+        <button id="btn-whatsapp-checkout" class="btn-whatsapp-checkout">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+            <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.74-.66-1.24-1.48-1.39-1.73-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.32-.02-.45-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.45.06-.68.32-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.78 2.71 4.3 3.8.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3z"/>
+          </svg>
+          <span>Confirmar Pedido por WhatsApp</span>
+        </button>
+
+        <p class="checkout-guarantee-note">🔒 Pedido procesado directamente con el centro de despacho oficial (+58 412-3714136).</p>
+      </div>
+    </aside>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-col brand-col">
+        <div class="brand-logo footer-logo">
+          <img src="assets/logo.png" alt="Cool Cola" class="site-logo-img">
+          <span class="logo-text">Cool<span class="logo-accent">Cola</span></span>
+          <span class="logo-badge">2L</span>
+        </div>
+        <p class="footer-desc">Bebidas carbonatadas premium en presentación familiar de 2 Litros. 8 sabores con calidad garantizada y la mayor refrescancia.</p>
+        <div class="footer-hotline">
+          <span>Pedidos & WhatsApp:</span>
+          <a href="https://wa.me/584123714136" target="_blank" rel="noopener">+58 412-3714136</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Sabores 2L</h4>
+        <ul>
+          <li><a href="#catalog-section">Cool Cola Negra</a></li>
+          <li><a href="#catalog-section">Cool Limón Cítrico</a></li>
+          <li><a href="#catalog-section">Cool Naranja Valenciana</a></li>
+          <li><a href="#catalog-section">Cool Uva Intensa</a></li>
+          <li><a href="#catalog-section">Cool Kola Roja</a></li>
+          <li><a href="#catalog-section">Cool Manzana Verde</a></li>
+          <li><a href="#catalog-section">Cool Piña & Maracuyá</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Información & Pedidos</h4>
+        <ul>
+          <li><a href="#catalog-section">Presentación Familiar 2L ($1.80)</a></li>
+          <li><a href="#benefits-section">Garantía de Carbonatación</a></li>
+          <li><a href="#catalog-section">Cupón COOL15 (15% OFF)</a></li>
+          <li><a href="#catalog-section">Cupón ENVIOGRATIS</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Atención al Cliente</h4>
+        <ul>
+          <li>Lunes a Domingo: 8:00 AM – 10:00 PM</li>
+          <li>Despacho Express a Domicilio</li>
+          <li>Envíos Gratis en compras > $8.00</li>
+          <li>Atención WhatsApp: +58 412-3714136</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 Cool Cola Inc. Todos los derechos reservados. Rojo, Blanco y Azul como la pasión de refrescarte.</p>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
